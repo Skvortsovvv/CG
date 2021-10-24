@@ -1,0 +1,149 @@
+<HTML>
+        <BODY>
+                <canvas id="lab01" width="1000" height="900">
+                </canvas>
+
+                <script>
+                        function Line(context, x0, y0, x1, y1, colour) {
+                                context.fillStyle = colour;
+                                var eps = 0;
+                                var x = x0, y = y0;
+                                var signx = (x1-x0)/Math.abs(x1-x0);
+                                var signy = (y1-y0)/Math.abs(y1-y0);
+                                if (Math.abs(x1 - x0) > Math.abs(y1 - y0)) {
+                                        while(x !== x1){
+                                                eps = eps + 2*(y1-y0);
+                                                if (Math.abs(eps) >= Math.abs(x1-x0)){
+                                                        y += signy * 1;
+                                                        eps -= signy * signx * (x1-x0) * 2;
+                                                }
+                                                x += signx*1;
+                                                ctx.fillRect(x, y, 2, 2);
+                                                
+                                        }
+                                } else {
+                                        while(y !== y1) {
+                                                eps = eps + 2*(x1-x0);
+                                                if (Math.abs(eps) >= Math.abs(y1-y0)){
+                                                x += signx * 1;
+                                                eps -= signy * signx * (y1-y0) * 2;
+                                                }
+                                                y += signy*1;
+                                                ctx.fillRect(x, y, 2, 2);
+                                                
+                                        }
+                                }
+                }
+                </script>
+
+                <script>
+                        function rotate(context, x_start, y_start, radius){
+                                let alpha = ((new Date()).getSeconds() * 6 - 90) % 361;
+                                console.log("alpha=" + alpha);
+                                let x_end = Math.abs(Math.trunc(x_start + (radius-50) * Math.cos(alpha * Math.PI / 180)));
+                                let y_end = Math.abs(Math.trunc(y_start + (radius-50) * Math.sin(alpha * Math.PI / 180)));
+
+                                let alpha1 = ((new Date()).getMinutes() * 6 - 90) % 361;
+                                console.log("alpha=" + alpha1);
+                                let x_end1 = Math.abs(Math.trunc(x_start + (radius-50) * Math.cos(alpha1 * Math.PI / 180)));
+                                let y_end1 = Math.abs(Math.trunc(y_start + (radius-50) * Math.sin(alpha1 * Math.PI / 180)));
+
+                                let alpha2 = ((new Date()).getHours() * 6 - 90) % 361;
+                                console.log("alpha=" + alpha2);
+                                let x_end2 = Math.abs(Math.trunc(x_start + (radius-65) * Math.cos(alpha2 * Math.PI / 180)));
+                                let y_end2 = Math.abs(Math.trunc(y_start + (radius-65) * Math.sin(alpha2 * Math.PI / 180)));
+
+                                Line(context, x_start, y_start, x_end, y_end, 'red');
+
+                                setInterval(function () {
+                                        if(((Math.cos(alpha * Math.PI / 180) != Math.cos(alpha1 * Math.PI / 180)) || (Math.sin(alpha * Math.PI / 180) != Math.sin(alpha1 * Math.PI / 180)))){
+                                                Line(context, x_start, y_start, x_end, y_end, "white");
+                                        }
+                                }, 1000);
+
+                                Line(context, x_start, y_start, x_end1, y_end1, 'black');
+                                setInterval(function () {
+                                        Line(context, x_start, y_start, x_end1, y_end1, "white");
+                                }, 60000 - (new Date()).getSeconds() * 1000);
+
+                                // Line(context, x_start, y_start, x_end2, y_end2, 'green');
+                                // setInterval(function () {
+                                //         Line(context, x_start, y_start, x_end2, y_end2, "white");
+                                // }, 3600000 - (new Date()).getMinutes()*60 * 1000);
+
+                        }
+                </script>
+
+                
+
+
+                <script>
+     
+                        var c = document.getElementById("lab01");
+                        var ctx = c.getContext("2d");
+                        var x0 = 200;
+                        var y0 = 160;
+                        var R = 150;
+                        ctx.strokeStyle = "black";
+                   
+                        ctx.beginPath();
+                        ctx.arc(200, 160, R, 0, 2 * Math.PI);
+                        ctx.stroke();
+                        ctx.closePath();
+
+                        ctx.beginPath();
+                        ctx.arc(200, 160, R+5, 0, 2 * Math.PI);
+                        ctx.stroke();
+                        ctx.closePath();
+
+                        var R2;
+
+                        for(var i = 1; i <= 60; ++i){
+                                ctx.beginPath();
+
+                                if(i%5 == 0){
+                                        R2 = 5;
+                                }else{
+                                        R2 = 2;
+                                }
+                                var x = x0 + (R-10) * Math.cos(-6*i*(Math.PI/180) + Math.PI/2);
+                                var y = y0 - (R-10) * Math.sin(-6*i*(Math.PI/180) + Math.PI/2);
+                                ctx.arc(x, y, R2, 0, 2*Math.PI, true);
+                                ctx.stroke();
+                                ctx.closePath();
+                        }
+
+                        for(var i = 1; i <= 12; ++i){
+                                ctx.beginPath();
+                                ctx.font = 'bold 25px sans-serif';
+                                var x = x0 + (R-30) * Math.cos(-30*i*(Math.PI/180)+Math.PI/2);
+                                var y = y0 - (R-30) * Math.sin(-30*i*(Math.PI/180)+Math.PI/2);
+                                if(i <= 9){
+                                        ctx.strokeText(i, x-5, y+10);
+                                }else{
+                                        ctx.strokeText(i, x-15, y+10);
+                                }
+                                ctx.stroke();
+                                ctx.closePath();
+                        }
+
+                        setInterval(function () {
+                                ctx.beginPath();
+                                ctx.arc(200, 160, 10, 0, 2 * Math.PI);
+                                ctx.stroke();
+                                ctx.closePath();
+                        }, 1);
+
+                        setInterval(function () {
+                                rotate(ctx, x0, y0, R-2);
+                        }, 1000);
+
+                        setInterval(function(){
+                                window.location.reload();
+                        }, 60000)
+
+                        
+
+                </script>
+        </BODY>
+</HTML>
