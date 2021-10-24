@@ -148,23 +148,42 @@
 
 						}
 							
-							max_t = Math.max(in_points);
-							min_t = Math.min(out_points);
-							var ex_1 = (lines[1][0] - lines[0][0])*max_t + lines[0][0]; 
-							var ey_1 = (lines[1][1] - lines[0][1])*max_t + lines[0][1];
+							// max_t = Math.max(in_points);
+							// //console.log(max_t)
+							// min_t = Math.min(out_points);
+							// console.log(min_t)
+							// let ex_1 = (lines[1][0] - lines[0][0])*max_t + lines[0][0]; 
+							// let ey_1 = (lines[1][1] - lines[0][1])*max_t + lines[0][1];
 
 
-							var ex_2 = (lines[1][0] - lines[0][0])*min_t + lines[0][0]; 
-							var ey_2 = (lines[1][1] - lines[0][1])*min_t + lines[0][1];
+							// var ex_2 = (lines[1][0] - lines[0][0])*min_t + lines[0][0]; 
+							// var ey_2 = (lines[1][1] - lines[0][1])*min_t + lines[0][1];
 
-							alert(ex_1, ey_1, ex_2, ey_2);
+							// alert(ex_1, ey_1, ex_2, ey_2);
 
-							ctx.fillStyle = "#00ff00";
-							Line(ctx, ex_1, ey_1, ex_2, ey_2); 
-							ctx.fillStyle = "#000000";
+							// ctx.fillStyle = "#00ff00";
+							// Line(ctx, ex_1/2, ey_1, ex_2, ey_2); 
+							// ctx.fillStyle = "#000000";
 
                 }
 
+
+				max_t = Math.max(in_points);
+				//console.log(max_t)
+				min_t = Math.min(out_points);
+				console.log(min_t)
+				let ex_1 = (lines[1][0] - lines[0][0])*max_t + lines[0][0]; 
+				let ey_1 = (lines[1][1] - lines[0][1])*max_t + lines[0][1];
+
+
+				var ex_2 = (lines[1][0] - lines[0][0])*min_t + lines[0][0]; 
+				var ey_2 = (lines[1][1] - lines[0][1])*min_t + lines[0][1];
+
+				alert(ex_1, ey_1, ex_2, ey_2);
+
+				ctx.fillStyle = "#00ff00";
+				Line(ctx, ex_1, ey_1, ex_2, ey_2); 
+				//ctx.fillStyle = "#000000";
 
 
                 // for(var j = 0; j < lines.length - 1; j+=2){
