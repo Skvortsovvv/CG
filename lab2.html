@@ -1,3 +1,4 @@
+
 <HTML>
 <BODY>
 <canvas id="lab02" width="1500" height="850">
@@ -59,8 +60,6 @@
     let in_points = [];
     let out_points = [];
 
-
-
 	canvas.addEventListener("click", function(event){
 			if (state == 0) {
 				ax = event.offsetX;
@@ -100,9 +99,6 @@
 				state = -3;
                 lines_counter += 1;
 
-				points.pop()
-
-
 
 				for(var i = 0; i < points.length-1; i++){
                         x_n = -(points[i+1][1] - points[i][1]);
@@ -114,15 +110,12 @@
 						x_b = lines[1][0];
 						y_b = lines[1][1];
 
-						//var t = -1 * (x_a * x_n + x_b * x_n + y_a * y_n - y_b * y_n) / (x_n*(x_b-x_a)+y_n*(y_b-y_a))
-						
                         var t = ( (points[i][1]-points[i+1][1])*(lines[0][0]-points[i][0])+(points[i+1][0]-points[i][0])*(lines[0][1]-points[i][1]) ) 
 						/ ( (lines[1][0]-lines[0][0])*(points[i+1][1]-points[i][1])+(lines[1][1]-lines[0][1])*(points[i][0]-points[i+1][0]) );
 						if(t <= 1 && t >= 0){
 							var d_x = lines[1][0] - lines[0][0]; // x_b - x_a
 							var d_y = lines[1][1] - lines[0][1]; // y_b - y_a
 							var scalar = d_x*x_n + d_y*y_n;
-							//alert(scalar)
 							if(scalar > 0) {
 								in_points.push(t)
 							} 
@@ -131,45 +124,11 @@
 								out_points.push(t);
 							}
 
-							// max_t = Math.max(in_points);
-							// min_t = Math.min(out_points);
-							// var ex_1 = (lines[1][0] - lines[0][0])*max_t + lines[0][0]; 
-							// var ey_1 = (lines[1][1] - lines[0][1])*max_t + lines[0][1];
-
-
-							// var ex_2 = (lines[1][0] - lines[0][0])*min_t + lines[0][0]; 
-							// var ey_2 = (lines[1][1] - lines[0][1])*min_t + lines[0][1];
-
-							// ctx.fillStyle = "#00ff00";
-							// Line(ctx, ex_2, ey_2, ex_1, ey_1); 
-							// ctx.fillStyle = "#000000";
-
-
-
 						}
 							
-							// max_t = Math.max(in_points);
-							// //console.log(max_t)
-							// min_t = Math.min(out_points);
-							// console.log(min_t)
-							// let ex_1 = (lines[1][0] - lines[0][0])*max_t + lines[0][0]; 
-							// let ey_1 = (lines[1][1] - lines[0][1])*max_t + lines[0][1];
-
-
-							// var ex_2 = (lines[1][0] - lines[0][0])*min_t + lines[0][0]; 
-							// var ey_2 = (lines[1][1] - lines[0][1])*min_t + lines[0][1];
-
-							// alert(ex_1, ey_1, ex_2, ey_2);
-
-							// ctx.fillStyle = "#00ff00";
-							// Line(ctx, ex_1/2, ey_1, ex_2, ey_2); 
-							// ctx.fillStyle = "#000000";
-
                 }
 
-
 				max_t = Math.max(in_points);
-				//console.log(max_t)
 				min_t = Math.min(out_points);
 				console.log(min_t)
 				let ex_1 = (lines[1][0] - lines[0][0])*max_t + lines[0][0]; 
@@ -179,50 +138,15 @@
 				var ex_2 = (lines[1][0] - lines[0][0])*min_t + lines[0][0]; 
 				var ey_2 = (lines[1][1] - lines[0][1])*min_t + lines[0][1];
 
-				alert(ex_1, ey_1, ex_2, ey_2);
 
 				ctx.fillStyle = "#00ff00";
 				Line(ctx, ex_1, ey_1, ex_2, ey_2); 
-				//ctx.fillStyle = "#000000";
-
-
-                // for(var j = 0; j < lines.length - 1; j+=2){
-                //     for(var i = 0; i < points.length-1; i++){
-                //         x_n = -(points[i+1][1] - points[i][1]);
-                //         y_n = points[i+1] - points[i];
-
-                //         var t = ( (points[i][1]-points[i+1][1])*(lines[j][0]-points[i][0])+(points[i+1][0]-points[i][0])*(lines[j][1]-points[i][1]) ) 
-				// 		/ ( (lines[j+1][0]-lines[j][0])*(points[i+1][1]-points[i][1])+(lines[j+1][1]-lines[j][1])*(points[i][0]-points[i+1][0]) );
-				// 		if(t <= 1 && t >= 0){
-				// 			var d_x = lines[j+1][0] - lines[j][0]; // x_b - x_a
-				// 			var d_y = lines[j+1][1] - lines[j][1]; // y_b - y_a
-				// 			var scalar = d_x*x_n + d_y*y_n;
-				// 			if(scalar > 0) { 
-				// 				in_points.push(t)
-				// 			} 
-				// 			else { 
-				// 				out_points.push(t);
-				// 			}
-
-				// 			max_t = Math.max(in_points);
-				// 			min_t = Math.min(out_points);
-				// 			var ex_1 = (lines[j+1][0] - lines[j][0])*max_t + lines[j][0]; 
-				// 			var ey_1 = (lines[j+1][1] - lines[j][1])*max_t + lines[j][1];
-
-
-				// 			var ex_2 = (lines[j+1][0] - lines[j][0])*min_t + lines[j][0]; 
-				// 			var ey_2 = (lines[j+1][1] - lines[j][1])*min_t + lines[j][1];
-
-				// 			ctx.fillStyle = "#00ff00";
-				// 			Line(ctx, ex_2, ey_2, ex_1, ey_1); 
-				// 			ctx.fillStyle = "#000000";
-				// 		}
-                //     }
-                // }
                 
             }
             canvas.addEventListener("dblclick", function(){
-                ctx.fillRect(10, 10, 10, 10);
+				Line(ctx, bx, by, ax, ay);
+				points.pop();
+				points.push([ax, ay]);
                 state = -1;
         })
 
