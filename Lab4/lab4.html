@@ -11,9 +11,10 @@
 
         function distance(P0, P1, P2){
             var k = (P2[1] - P0[1])/(P2[0] - P0[0]);
-            var b = k*P0[0] - P0[1];
-            d = Math.abs(-k*P1[0] + P0[1] -b)/Math.sqrt(k*k + 1);
-            console.log(d);
+            console.log('Coef', k);
+            var b = -1*k*P0[0] + P0[1];
+            d = Math.abs(-k*P1[0] + P0[1] -1*b)/Math.sqrt(k*k + 1);
+            console.log('Distance ',d);
             return d
         }
 
@@ -30,14 +31,16 @@
                 P0__ = []; // x0" y0"
                 P0__[0] = 0.5*P0[0] + 0.5*P1[0];
                 P0__[1] = 0.5*P0[1] + 0.5*P1[1];
-
+                Line(ctx, P0_[0], P0_[1], P1_[0], P1_[1]);
                 Beze(P0, P0_, P1_);
-                Beze(P0_, P1_, P2);
+                Beze(P2, P1_, P0_);
                  
             }else{
                 Line(ctx, P0_[0], P0_[1], P1_[0], P1_[1]);
             }
         }
+
+        
 
         var canvas = document.getElementById("lab02");
         var ctx = canvas.getContext("2d");
@@ -76,12 +79,15 @@
                     points[counter] = [p1x, p1y];
                     Line(ctx, bx, by, p1x, p1y);
                     state = -1;
-                    
+
+                }else if(state == -1){
                     P0 = points[0];
                     P1 = points[1];
                     P2 = points[2];
+                    state = -2;
 
                     Beze(P0, P1, P2);
+                    //Beze2(P0, P1, P2);
                 }
     
                 counter += 1;
