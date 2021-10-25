@@ -1,0 +1,93 @@
+
+<HTML>
+    <BODY>
+    <canvas id="lab02" width="1500" height="850">
+    </canvas>
+    
+    <script src='bresenham.js' type='text/javascript'></script>
+
+    <script>
+
+
+        function distance(P0, P1, P2){
+            var k = (P2[1] - P0[1])/(P2[0] - P0[0]);
+            var b = k*P0[0] - P0[1];
+            d = Math.abs(-k*P1[0] + P0[1] -b)/Math.sqrt(k*k + 1);
+            console.log(d);
+            return d
+        }
+
+        function Beze(P0, P1, P2){
+            if(distance(P0, P1, P2) > 1){
+                P0_ = []; // x0' y0'
+                P0_[0] = 0.5*P0[0] + 0.5*P1[0];
+                P0_[1] = 0.5*P0[1] + 0.5*P1[1];
+                
+                P1_ = []; // x1' y1'
+                P1_[0] = 0.5*P1[0] + 0.5*P2[0];
+                P1_[1] = 0.5*P1[1] + 0.5*P2[1];
+
+                P0__ = []; // x0" y0"
+                P0__[0] = 0.5*P0[0] + 0.5*P1[0];
+                P0__[1] = 0.5*P0[1] + 0.5*P1[1];
+
+                Beze(P0, P0_, P1_);
+                Beze(P0_, P1_, P2);
+                 
+            }else{
+                Line(ctx, P0_[0], P0_[1], P1_[0], P1_[1]);
+            }
+        }
+
+        var canvas = document.getElementById("lab02");
+        var ctx = canvas.getContext("2d");
+    
+        var state = 0;
+        var ax, ay;
+        var bx, by;
+        var p1x, p1y;
+        var p2x, p2y;
+        
+    
+        var points = [];
+        var counter = 0;
+        var lines = []
+        var lines_counter = 0;
+        let in_points = [];
+        let out_points = [];
+    
+        canvas.addEventListener("click", function(event){
+                if (state == 0) {
+                    ax = event.offsetX;
+                    ay = event.offsetY;
+                    points[counter] = [ax, ay];
+                    state = 1;
+
+                } else if (state == 1) {
+                    bx = event.offsetX;
+                    by = event.offsetY;
+                    points[counter] = [bx, by];
+                    Line(ctx, ax, ay, bx, by);
+                    state = 2;
+
+                } else if (state == 2) {
+                    p1x = event.offsetX;
+                    p1y = event.offsetY;
+                    points[counter] = [p1x, p1y];
+                    Line(ctx, bx, by, p1x, p1y);
+                    state = -1;
+                    
+                    P0 = points[0];
+                    P1 = points[1];
+                    P2 = points[2];
+
+                    Beze(P0, P1, P2);
+                }
+    
+                counter += 1;
+    
+        });
+    
+    </script>
+    </BODY>
+</HTML>
