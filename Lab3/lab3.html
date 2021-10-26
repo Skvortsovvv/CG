@@ -1,0 +1,67 @@
+<!-- <HTML>
+    <BODY>
+        <img id="corgi" widht = "900" height = "900"
+        src = "corgi.jpg">
+
+        <canvas id ="canvas" width = "0" height = "0">
+        </canvas>
+        <script>
+
+                var c = document.getElementById("canvas");
+                var ctx = c.getContext("2d");
+                ctx.fillStyle = "red";
+                ctx.fillRect(10, 10, 50, 50);
+
+                function copy() {
+                var imgData = ctx.getImageData(10, 10, 50, 50);
+                ctx.putImageData(imgData, 10, 70);
+                }
+                copy();
+
+                // var canvas=document.getElementById("canvas");
+                // var ctx=canvas.getContext("2d");
+                // var img=document.getElementById("corgi");
+                // //ctx.drawImage(img,0,0);
+                // var imgData=ctx.getImageData(0,0,900,900);
+                
+                // инвертироват цвета
+                // for (var i=0; i<imgData.data.length; i+=4)
+                // {
+                //     imgData.data[i]=255-imgData.data[i];
+                //     imgData.data[i+1]=255-imgData.data[i+1];
+                //     imgData.data[i+2]=255-imgData.data[i+2];
+                //     imgData.data[i+3]=255;
+                // }
+
+                //ctx.putImageData(imgData,0,50);
+
+        </script>
+    </BODY>
+</hHTML> -->
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<img id="corgi" widht = "900" height = "900"
+src = "corgi.jpg">
+
+<canvas id="canvas" width="300" height="2500" style="border:1px solid #d3d3d3;">
+</canvas>
+
+<script>
+var c = document.getElementById("canvas");
+var ctx = c.getContext("2d");
+var img = document.getElementById("corgi");
+ctx.drawImage(img,0,0);
+
+function copy() {
+  var imgData = ctx.getImageData(0, 0, 900, 900);
+  ctx.putImageData(imgData, 10, 0);
+}
+</script>
+
+<button onclick="copy()">Copy</button>
+
+</body>
+</html>
