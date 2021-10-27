@@ -1,0 +1,28 @@
+<HTML>
+    <BODY>
+    
+    <canvas id = 'lab3'  width="400" height="400">
+    </canvas>
+    <canvas id = 'lab3_1'>
+    </canvas>
+        
+    <script>
+        var canvas = document.getElementById('lab3');
+        var canvas2 = document.getElementById('lab3_1');
+        var context = canvas.getContext('2d');
+        var context2 = canvas2.getContext('2d');
+        var img = new Image();
+        img.crossOrigin = "Anonymous";
+            img.onload = function(){
+            context.drawImage(img, 0, 0, canvas.width, canvas.height);
+            //data_1 = context.getImageData(0, 0, canvas.width, canvas.height);
+            //data_2 = context2.createImageData(400, 400);
+        }
+        img.src = 'corgi.jpg';
+
+
+
+    </script>
+    
+    </BODY>
+    </HTML>
