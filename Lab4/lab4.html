@@ -13,7 +13,7 @@
             var k = (P2[1] - P0[1])/(P2[0] - P0[0]);
             console.log('Coef', k);
             var b = -1*k*P0[0] + P0[1];
-            d = Math.abs(-k*P1[0] + P0[1] -1*b)/Math.sqrt(k*k + 1);
+            d = Math.abs(-k*P1[0] + P1[1] -1*b)/Math.sqrt(k*k + 1);
             console.log('Distance ',d);
             return d
         }
