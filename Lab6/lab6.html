@@ -1,12 +1,19 @@
 
 <HTML>
     <BODY>
-    <canvas id="lab02" width="1500" height="850">
+    <canvas id="lab02" width="1080" height="720">
     </canvas>
     
     <script src='bresenham.js' type='text/javascript'></script>
 
     <script>
+        
+        class Point{
+            constructor(x,y){
+                this.x = x;
+                this.y = y;
+            }
+        }
 
 
         function distance(P0, P1, P2){
@@ -62,51 +69,82 @@
 
         var canvas = document.getElementById("lab02");
         var ctx = canvas.getContext("2d");
-    
+        ctx.fillStyle = '#000000';
+
         var state = 0;
         var ax, ay;
         var bx, by;
         var p1x, p1y;
         var p2x, p2y;
         
-    
-        var points = [];
-        var counter = 0;
+        let points = [];
+        let counter = 0;
 
-    
-        canvas.addEventListener("click", function(event){
-                if (state == 0) {
-                    ax = event.offsetX;
-                    ay = event.offsetY;
-                    points[counter] = [ax, ay];
-                    state = 1;
-
-                } else if (state == 1) {
-                    bx = event.offsetX;
-                    by = event.offsetY;
-                    points[counter] = [bx, by];
-                    Line(ctx, ax, ay, bx, by);
-                    state = 2;
-
-                } else if (state == 2) {
-                    p1x = event.offsetX;
-                    p1y = event.offsetY;
-                    points[counter] = [p1x, p1y];
-                    Line(ctx, bx, by, p1x, p1y);
-                    state = -1;
-
-                }else if(state == -1){
-                    P0 = points[0];
-                    P1 = points[1];
-                    P2 = points[2];
-                    state = -2;
-
-                    Beze(P0, P1, P2);
-                    Beze2(P0, P1, P2);
+        function Mult_Mv(M,v){
+            var res = [];
+            for (var i = 0; i < 3; ++i){
+                res.push(0);
+                for (var j = 0; j < 3; ++j){
+                    res[i] = res[i] + M[i*3+j] * v[j];
                 }
-    
-                counter += 1;
-    
+            }
+            return res;
+        }
+
+        canvas.addEventListener("click", function(event){
+            if(counter < 3){
+                points.push([event.offsetX, event.offsetY]);
+                ctx.fillRect(event.offsetX, event.offsetY, 2, 2);
+                counter++;
+            }else{
+                P0 = points[0];
+                P1 = points[1];
+                P2 = points[2];
+                Beze(P0, P1, P2);
+                Beze2(P0, P1, P2);
+
+                var P0_new = [];
+                var P2_new = [];
+
+                P0_new[0] = P0[0];
+                P0_new[1] = P0[1];
+                P2_new[0] = P2[0];
+                P2_new[1] = P2[1];
+
+                for(var i = 0; i < 360; i += 10){
+                    
+                    var alpha = i*Math.PI/180;
+                    P0_new[0] -= P1[0];
+                    P0_new[1] -= P1[1];
+                    P2_new[0] -= P1[0];
+                    P2_new[1] -= P1[1];
+
+                    var M = [ Math.cos(alpha), -1*Math.sin(alpha), 0,
+                                Math.sin(alpha), Math.cos(alpha), 0,
+                                0, 0, 1];
+
+                    var out = Mult_Mv(M, [P0_new[0], P0_new[1], 1]);
+                    console.log(out);
+                    P0_new[0] = out[0] + P1[0];
+                    P0_new[1] = out[1] + P1[1];
+                    out = Mult_Mv(M, [P2_new[0], P2_new[1], 1]);
+                    console.log(out);
+                    P2_new[0] = out[0] + P1[0];
+                    P2_new[1] = out[1] + P1[1];
+                    Beze(P0_new, P1, P2_new);
+                    Beze2(P0_new, P1, P2_new);
+
+                    P0_new[0] = P0[0];
+                    P0_new[1] = P0[1];
+                    P2_new[0] = P2[0];
+                    P2_new[1] = P2[1];
+
+                }
+
+                counter = 0;
+                points = [];
+            }
+            
         });
     
     </script>
