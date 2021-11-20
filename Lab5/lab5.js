@@ -85,6 +85,9 @@ function lines(pnts, edgs){
             delete edgs[i];
         }
     }
+    if(pnts[pnts.length-1].y == pnts[0].y){
+        delete edgs[pnts.length-1];
+    }
 }
 
 //var dict = {};
@@ -127,32 +130,38 @@ canvas.addEventListener("dblclick", function(event){
     console.log(edges);
     for(var y = min_y; y <= max_y; ++y){
 
-        for(var j = 0; j < edges.length-1; ++j){
-            if((edges[j][0].y <= y) && (y <= edges[j][1].y)){
-                var k = (edges[j][1].y - edges[j][0].y)/(edges[j][1].x - edges[j][0].x);
-                var x = y/k;
-                if(typeof peresech_points[y] == "undefined"){
-                    peresech_points[y] = [];
-                }
-                peresech_points[y].push(x);
+        for(var j = 0; j < edges.length; ++j){
+            if (typeof edges[j] == "undefined"){
+                continue;
             }
+            var x = 0;
+            var flag = -1;
+            if((edges[j][0].y < y) && (y < edges[j][1].y)){
+                flag = 0;
+            }else if((edges[j][1].y < y) && (y < edges[j][0].y)){
+                flag = 1;
+            }
+            if(flag == -1){
+                continue
+            }else if(flag == 0){
+                var k = (edges[j][1].y - edges[j][0].y)/(edges[j][1].x - edges[j][0].x);    
+                x += edges[j][0].x;
+            }else{
+                var k = (edges[j][0].y - edges[j][1].y)/(edges[j][0].x - edges[j][1].x);    
+                x += edges[j][1].x;
+            }
+            x += y/k;
+            if(typeof peresech_points[y] == "undefined"){
+                peresech_points[y] = [];
+            }
+             
+            peresech_points[y].push(x);
         }
         
-        
-        //peresech(edges, peresech_points, i);
     }
-    // for(var j = 0; j < edges.length; ++j){
-    //     if(Math.min(edges[j][0].y, edges[j][1].y) == i){
-    //         var temp = Math.min(edges[j][0].y, edges[j][1].y);
-    //         var x =  edges[j][1].x;
-    //         if(edges[j][0].y == temp){
-    //             x = edges[j][0].x;
-    //         }
-    //         delete peresech_points[y][x];
-    //     }
-    // }
+
     console.log(peresech_points)
-    for(const [key, value] of peresech_points.entries()){
+    for(const [key, value] of Object.entries(peresech_points)){
         for(var j = 0; j < peresech_points[key].length-1; ++j){
             Line(ctx, peresech_points[key][j], key, 
                 peresech_points[key][j+1], key)

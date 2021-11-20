@@ -2,7 +2,76 @@
 <body>
 
 <canvas id='canv' width='500' height='500' style='border:1px solid' tabindex='1'></canvas>
-<script src='lab5.js'></script>
+    <script>
+        let canvas = document.getElementById("canv");
+        let ctx = canvas.getContext("2d");
+        ctx.fillStyle = '#000000';
+        let flag = false
+
+        class Point{    // Создаем класс точки, в которой будем хранить координаты
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+
+        function FillPolygon(context, vert) {
+            let miny = vert[0].y, maxy = vert[0].y;         //  поиск минимального и максимального Y
+            for (let i = 0; i < vert.length; ++i) {         //  проходя по массиву поставленных точек
+                if (vert[i].y < miny) miny = vert[i].y;     //  
+                if (vert[i].y > maxy) maxy = vert[i].y;     //
+            }
+
+            let yarray = [];                                        // массив вида yarray[Y] = [x1, x2, ...] - хранит координаты X 
+            for (let i = 0; i < vert.length; ++i) {                 // каждой точки пересечения по данной координате Y
+                let p = 0;                                          // p = следующая Y, если данная Y не равна концу списка
+                if (i != vert.length - 1) p = i + 1;
+                let hi = 0, lo = 0;                                  
+                if (vert[i].y > vert[p].y) {hi = i; lo = p;}        // проверяем, лежит ли итерируемая Y между координатами Yi и Yp точек прямой,
+                else if (vert[i].y < vert[p].y) {hi = p; lo = i;}   // принадлежащей фигуре, чтобы найти пересечения
+                else continue;
+
+                let k = (vert[hi].y - vert[lo].y) / (vert[hi].x - vert[lo].x); // вычисляем коэф. угла наклона стороны фигуры
+                for (let j = vert[lo].y; j < vert[hi].y; ++j) {                // в цикле проходим по всем сторонам
+                    if (typeof yarray[j] == "undefined") yarray[j] = [];       // если в массиве yarray нет точек пересечения с данной Y, то создаем массив
+                    yarray[j].push((j - vert[lo].y)/k + vert[lo].x)            // добавляем точку X в массив пересечений с учетом сдвига по оси OX
+                }
+            }
+
+            for (let y = miny; y < maxy; ++y) {                                 // в цикле проходим по всех Y от min до max
+                let xarray = yarray[y].sort(function(a, b) { return a - b; });  // сортируем X
+                for (let j = 0; j < xarray.length / 2; ++j) {   // проходим по числу интервалам между точками пересечений (если в фигуре получили 4 точки пересечения, то между ними
+                                                                // может быть только два промежутка фигуры, между первыми двумя точкаи и последними двумя)
+                    for (let x = xarray[j*2]; x < xarray[j*2+1]; ++x) {     // строим точки для каждого интервала соответственно 
+                        ctx.fillRect(Math.floor(x), Math.floor(y), 1, 1);   //
+                    }
+                }
+            }
+        }
+
+        let vertices = [];
+
+        canvas.addEventListener("click", function(event){           // обрабтка нажатия ЛКМ
+            vertices.push(new Point(event.offsetX, event.offsetY)); // добавляем новую точку в массив точек
+            ctx.fillRect(event.offsetX, event.offsetY, 2, 2);       // зарисовываем точку
+        })
+
+        canvas.addEventListener("keydown", function(event) {        // обрабтка нажатия space
+            if (event.key == ' ') {
+                
+                console.log(vertices);
+                FillPolygon(ctx, vertices);
+                vertices = [];
+                if (flag == false){
+                    flag = true;
+                    ctx.fillStyle = '#F00000';
+                } else {
+                    ctx.fillStyle = '#000000';
+                    flag = false
+                }
+            }
+        })
+    </script>
 
 </body>
 </html>
