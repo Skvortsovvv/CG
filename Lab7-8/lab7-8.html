@@ -19,56 +19,84 @@
             var ctx = canvas.getContext("2d")
             ctx.fillStyle = '#000000'
             canvas.setAttribute("tabindex", 0);
-            var alpha = 40*Math.PI/180;
+            var alpha = 30*Math.PI/180;
             
             
-            var M_y = [ Math.sin(alpha), 0, Math.cos(alpha), 0,
-                    0, 1, 0, 0,
-                    Math.cos(alpha), 0, -1*Math.sin(alpha), 0,
-                    0, 0, 0, 1];
+            var M_y = [ Math.cos(alpha), 0, Math.sin(alpha), 0,
+                        0,               1, 0,               0,
+                        -1*Math.sin(alpha), 0, Math.cos(alpha), 0,
+                        0,               0, 0,                  1];
 
             var M_z = [ Math.cos(alpha), -1*Math.sin(alpha), 0, 0,
-                    Math.sin(alpha), Math.cos(alpha), 0, 0,
-                    0, 0, 0, 0,
-                    0, 0, 0, 1];
+                        Math.sin(alpha), Math.cos(alpha), 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1];
 
-            var points = [[30, 30, 0], [130, 30, 0], [130, 130, 0], [30, 130, 0], [80, 80, 160]]
-                    //      1              2            3              4           5                
+            var points = [[30, 30, 0], [130, 30, 0], [130, 100, 0],[100, 130,0],[30, 130, 0], [80, 80, 160]]
+                    //      1              2            3              new              4           5                
             for (var i = 0; i < points.length-2; ++i){
                 Line(ctx, points[i][0], points[i][1], points[i+1][0], points[i+1][1])
             }
             Line(ctx, points[points.length-2][0],points[points.length-2][1],
                     points[0][0], points[0][1])
             ctx.fillStyle = "red"
+            var basisPoint = [80, 80, 0]
             ctx.fillRect(points[points.length-1][0], points[points.length-1][1], 5, 5)
             for (var i = 0; i < points.length; ++i){
-                points[i][0] -= points[points.length-1][0]
-                points[i][1] -= points[points.length-1][1]
+                points[i][0] -= basisPoint[0]//points[points.length-1][0]
+                points[i][1] -= basisPoint[1]//points[points.length-1][1]
+                //points[i][2] -= basisPoint[2]//points[points.length-1][2]
                 var out = Mult_Mv(M_z, [points[i][0], points[i][1], points[i][2], 1])
-                points[i][0] = out[0] + points[points.length-1][0]
-                points[i][1] = out[1] + points[points.length-1][1]
+                points[i][0] = out[0] + basisPoint[0]//points[points.length-1][0]
+                points[i][1] = out[1] + basisPoint[1]//points[points.length-1][1]
+                //points[i][2] = out[2] + basisPoint[2]//points[points.length-1][2]
             }
 
-            var alpha = 70*Math.PI/180;
-            var M_x = [ 1, 0, 0, 0,
-                    0, Math.cos(alpha), -1*Math.sin(alpha), 0,
-                    0, Math.sin(alpha), Math.cos(alpha), 0,
-                    0, 0, 0, 1];
-
-             
-            for (var i = 0; i < points.length; ++i){
-                points[i][0] -= points[points.length-1][0]
-                points[i][1] -= points[points.length-1][1]
-                var out = Mult_Mv(M_x, [points[i][0], points[i][1], points[i][2], 1])
-                points[i][0] = out[0] + points[points.length-1][0]
-                points[i][1] = out[1] + points[points.length-1][1] + points[points.length-1][2]
-            }   
+            ctx.fillStyle = 'green'
             for (var i = 0; i < points.length-2; ++i){
                 Line(ctx, points[i][0], points[i][1], points[i+1][0], points[i+1][1])
             }
+            //console.log(points[4])
             Line(ctx, points[points.length-2][0],points[points.length-2][1],
                     points[0][0], points[0][1])
-            alert(points[4][1])      
+
+            var alpha = 60*Math.PI/180;
+            var M_x = [ 1, 0, 0, 0,
+                        0, Math.cos(alpha), -1*Math.sin(alpha), 0,
+                        0, Math.sin(alpha), Math.cos(alpha), 0,
+                        0, 0, 0, 1];
+
+             
+            for (var i = 0; i < points.length; ++i){
+                points[i][0] -= basisPoint[0]//points[points.length-1][0]
+                points[i][1] -= basisPoint[1]//points[points.length-1][1]
+                points[i][2] -= basisPoint[2]//points[points.length-1][2]
+                var out = Mult_Mv(M_x, [points[i][0], points[i][1], points[i][2], 1])
+                points[i][0] = out[0] + basisPoint[0]//points[points.length-1][0]
+                points[i][1] = out[1] + basisPoint[1] + 160
+                points[i][2] = out[2] + basisPoint[2]//points[points.length-1][2]
+            }
+            ctx.fillStyle = 'red'
+            //console.log[points[0]]
+            for (var i = 0; i < points.length-2; ++i){
+                Line(ctx, points[i][0], points[i][1], points[i+1][0], points[i+1][1])
+            }
+            //console.log(points[4])
+            Line(ctx, points[points.length-2][0],points[points.length-2][1],
+                    points[0][0], points[0][1])
+            ctx.fillRect(points[5][0],points[5][1], 7, 7)
+            alert(points[5])
+            // points[length-1][0] -= [points][3][0]
+            // points[length-1][1] -= [points][3][1]
+            // points[length-1][2] -= [points][3][2]
+            // var out = Mult_Mv(M_x, [points[length-1][0], points[length-1][1], points[length-1][2], 1])
+            // points[length-1][0] = out[0] + [points][3][0]
+            // points[length-1][1] = out[1] + [points][3][1]
+            // points[length-1][2] = out[2] + [points][3][2]
+            // alert(points[length-1][0], points[length-1][1], 2)
+            // ctx.fillStyle = 'blue'
+            // ctx.fillRect(points[length-1][0],points[length-1][2], 8, 8)
+
             // points[1][0] -= pointCenter[0]
             // points[1][1] -= pointCenter[1]
             // var out = Mult_Mv(M_z, [points[1][0], points[1][1], points[1][2], 1]) // Поворот вокруг OZ
