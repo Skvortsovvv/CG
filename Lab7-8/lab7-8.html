@@ -27,7 +27,7 @@
                     [3, 4, 5],
                     [4, 0, 5],
             ]
-            setInterval(draw, 0.8)
+            setInterval(draw, 0.2)
             setInterval(clr, 1)
             function clr(){
                 ctx.clearRect(0,0,canvas.width, canvas.height)
@@ -80,8 +80,6 @@
                     for (let j = min_y; j < max_y + 1; ++j) {
                         y_array[j] = [];
                     }
-                    console.log(points);
-                    console.log(y_array);
                     for (let i = 0; i < points.length; ++i) {
                         let next = 0;
                         if (i !== points.length - 1)
@@ -97,7 +95,6 @@
                         }
                         else continue;
 
-                        console.log(y_array);
                         let k = (points[up][1] - points[down][1]) / (points[up][0] - points[down][0]);
                         for (let j = points[down][1]; j < points[up][1]; ++j) {
                             y_array[Math.floor(j)].push((j - points[down][1])/k + points[down][0]);
