@@ -17,68 +17,52 @@
         <script>
             var canvas = document.getElementById("lab78")
             var ctx = canvas.getContext("2d")
-            //ctx.fillStyle = '#000000'
             canvas.setAttribute("tabindex", 0);
-            var alpha = 30*Math.PI/180;
-            
+            var angle = 60
             var facets = [
-                [0, 1, 5],
-                [1, 2, 5],
-                [2, 3, 5],
-                [3, 4, 5],
-                [4, 0, 5]
-            ]
-            
-            var M_y = [ Math.cos(alpha), 0, Math.sin(alpha), 0,
-                        0,               1, 0,               0,
-                        -1*Math.sin(alpha), 0, Math.cos(alpha), 0,
-                        0,               0, 0,                  1];
+                    [0, 1, 5],
+                    [1, 2, 5],
+                    [2, 3, 5],
+                    [3, 4, 5],
+                    [4, 0, 5]
+                ]
+
+            var alpha = angle*Math.PI/180;
 
             var M_z = [ Math.cos(alpha), -1*Math.sin(alpha), 0, 0,
-                        Math.sin(alpha), Math.cos(alpha), 0, 0,
-                        0, 0, 1, 0,
-                        0, 0, 0, 1];
-            
+                    Math.sin(alpha), Math.cos(alpha), 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1];
+        
             var points = [[30, 30, 0], [130, 30, 0], [130, 100, 0],
                             [100, 130,0],[30, 130, 0], [80, 80, 160]]
             
-            //ctx.fillStyle = "red"
             var basisPoint = [80, 80, 0]
             for (var i = 0; i < points.length; ++i){
-                points[i][0] -= basisPoint[0]//points[points.length-1][0]
-                points[i][1] -= basisPoint[1]//points[points.length-1][1]
+                points[i][0] -= basisPoint[0]
+                points[i][1] -= basisPoint[1]
                 var out = Mult_Mv(M_z, [points[i][0], points[i][1], points[i][2], 1])
-                points[i][0] = out[0] + basisPoint[0] + 150//points[points.length-1][0]
-                points[i][1] = out[1] + basisPoint[1]//points[points.length-1][1]
+                points[i][0] = out[0] + basisPoint[0] + 150
+                points[i][1] = out[1] + basisPoint[1]
             }
 
-            var alpha = 60*Math.PI/180;
+            var alphaX = 60*Math.PI/180;
             var M_x = [ 1, 0, 0, 0,
-                        0, Math.cos(alpha), -1*Math.sin(alpha), 0,
-                        0, Math.sin(alpha), Math.cos(alpha), 0,
+                        0, Math.cos(alphaX), -1*Math.sin(alphaX), 0,
+                        0, Math.sin(alphaX), Math.cos(alphaX), 0,
                         0, 0, 0, 1];
 
-             
-            for (var i = 0; i < points.length; ++i){
-                points[i][0] -= basisPoint[0]//points[points.length-1][0]
-                points[i][1] -= basisPoint[1]//points[points.length-1][1]
-                points[i][2] -= basisPoint[2]//points[points.length-1][2]
-                var out = Mult_Mv(M_x, [points[i][0], points[i][1], points[i][2], 1])
-                points[i][0] = out[0] + basisPoint[0]//points[points.length-1][0]
-                points[i][1] = out[1] + basisPoint[1] + 150
-                points[i][2] = out[2] + basisPoint[2]//points[points.length-1][2]
-            }
-
-            //ctx.fillStyle = 'red'
-            // for (var i = 0; i < points.length-2; ++i){
-            //     Line(ctx, points[i][0], points[i][1], points[i+1][0], points[i+1][1])
-            // }
-            // Line(ctx, points[points.length-2][0],points[points.length-2][1],
-            //         points[0][0], points[0][1])
-            // for (var i = 0; i < points.length-1; ++i){
-            //     Line(ctx, points[i][0], points[i][1], points[points.length-1][0], points[points.length-1][1])
-            // }
             
+            for (var i = 0; i < points.length; ++i){
+                points[i][0] -= basisPoint[0]
+                points[i][1] -= basisPoint[1]
+                points[i][2] -= basisPoint[2]
+                var out = Mult_Mv(M_x, [points[i][0], points[i][1], points[i][2], 1])
+                points[i][0] = out[0] + basisPoint[0]
+                points[i][1] = out[1] + basisPoint[1] + 150
+                points[i][2] = out[2] + basisPoint[2]
+            }
+    
             function fill(points) {
                 let min_y = Math.floor(points[0][1]), max_y = Math.floor(points[0][1]);
                 for (let i = 0; i < points.length; ++i) {
@@ -131,8 +115,8 @@
                 [3, 4, 5],
                 [4, 0, 5]
             ]
-            var I_fon = 20, I_p = 235, K_p = 0.4;
-            var lamp = [-100, -100, -100];
+            var I_fon = 50, I_p = 500, K_p = 0.5;
+            var lamp = [-100, -100, 100];
             
             function cosinus(v1, v2) {
                 return (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2])
@@ -140,13 +124,16 @@
                         * Math.sqrt(Math.pow(v2[0], 2) + Math.pow(v2[1], 2) + Math.pow(v2[2], 2)));
             }
 
+            
 
             for (let i = 0; i < facets.length; ++i){
                 var p0 = points[facets[i][0]]
                 var p1 = points[facets[i][1]]
                 var p2 = points[facets[i][2]]
-                var center_0_1 = [(p0[0] + p1[0])/2, (p0[1] + p1[1])/2, (p0[2] + p1[2])/2]
-                var center = [(center_0_1[0] + p2[0]/2), (center_0_1[1] + p2)/2, (center_0_1[2] + p2[2])/2]
+                // var center_0_1 = [(p0[0] + p1[0])/2, (p0[1] + p1[1])/2, (p0[2] + p1[2])/2]
+                // var center = [(center_0_1[0] + p2[0]/2), (center_0_1[1] + p2)/2, (center_0_1[2] + p2[2])/2]
+                let center_1_2 = [(p2[0] + p1[0]) / 2, (p2[1] + p1[1]) / 2, (p2[2] + p1[2]) / 2];
+                let center = [(center_1_2[0] + p0[0]) / 2, (center_1_2[1] + p0[1]) / 2, (center_1_2[2] + p0[2]) / 2];
                 var light = [
                     lamp[0] - center[0],
                     lamp[1] - center[1],
@@ -157,7 +144,7 @@
                     (p2[0] - p0[0]) * (p1[2] - p0[2]) - (p1[0] - p0[0]) * (p2[2] - p0[2]),
                     (p1[0] - p0[0]) * (p2[1] - p0[1]) - (p2[0] - p0[0]) * (p1[1] - p0[1])
                 ]
-                console.log(normal)
+                //console.log(normal)
                 var observer = [0, 0, -1]
                 if (cosinus(observer, normal) <= 0){
                     var cos_phi = cosinus(light, normal)
@@ -171,10 +158,139 @@
                     Line(p0[0], p0[1], p1[0], p1[1]);
                     Line(p0[0], p0[1], p2[0], p2[1]);
                     Line(p2[0], p2[1], p1[0], p1[1]);
-
                 }
 
             }
+            // var M_z = [ Math.cos(alpha), -1*Math.sin(alpha), 0, 0,
+            //             Math.sin(alpha), Math.cos(alpha), 0, 0,
+            //             0, 0, 1, 0,
+            //             0, 0, 0, 1];
+            
+            // var points = [[30, 30, 0], [130, 30, 0], [130, 100, 0],
+            //                 [100, 130,0],[30, 130, 0], [80, 80, 160]]
+            
+            // var basisPoint = [80, 80, 0]
+            // for (var i = 0; i < points.length; ++i){
+            //     points[i][0] -= basisPoint[0]
+            //     points[i][1] -= basisPoint[1]
+            //     var out = Mult_Mv(M_z, [points[i][0], points[i][1], points[i][2], 1])
+            //     points[i][0] = out[0] + basisPoint[0] + 150
+            //     points[i][1] = out[1] + basisPoint[1]
+            // }
+
+            // var alpha = 60*Math.PI/180;
+            // var M_x = [ 1, 0, 0, 0,
+            //             0, Math.cos(alpha), -1*Math.sin(alpha), 0,
+            //             0, Math.sin(alpha), Math.cos(alpha), 0,
+            //             0, 0, 0, 1];
+
+             
+            // for (var i = 0; i < points.length; ++i){
+            //     points[i][0] -= basisPoint[0]
+            //     points[i][1] -= basisPoint[1]
+            //     points[i][2] -= basisPoint[2]
+            //     var out = Mult_Mv(M_x, [points[i][0], points[i][1], points[i][2], 1])
+            //     points[i][0] = out[0] + basisPoint[0]
+            //     points[i][1] = out[1] + basisPoint[1] + 150
+            //     points[i][2] = out[2] + basisPoint[2]
+            // }
+    
+            // function fill(points) {
+            //     let min_y = Math.floor(points[0][1]), max_y = Math.floor(points[0][1]);
+            //     for (let i = 0; i < points.length; ++i) {
+            //         if (Math.floor(points[i][1]) < min_y) min_y = Math.floor(points[i][1]);
+            //         if (Math.floor(points[i][1]) > max_y) max_y = Math.floor(points[i][1]);
+            //     }
+
+            //     let y_array = [];
+            //     for (let j = min_y; j < max_y + 1; ++j) {
+            //         y_array[j] = [];
+            //     }
+            //     console.log(points);
+            //     console.log(y_array);
+            //     for (let i = 0; i < points.length; ++i) {
+            //         let next = 0;
+            //         if (i !== points.length - 1)
+            //             next = i + 1;
+            //         let up = 0, down = 0;
+            //         if (Math.floor(points[i][1]) > Math.floor(points[next][1])) {
+            //             up = i;
+            //             down = next;
+            //         }
+            //         else if (Math.floor(points[i][1]) < Math.floor(points[next][1])) {
+            //             up = next;
+            //             down = i;
+            //         }
+            //         else continue;
+
+            //         console.log(y_array);
+            //         let k = (points[up][1] - points[down][1]) / (points[up][0] - points[down][0]);
+            //         for (let j = points[down][1]; j < points[up][1]; ++j) {
+            //             y_array[Math.floor(j)].push((j - points[down][1])/k + points[down][0]);
+            //         }
+            //     }
+
+            //     for (let y = min_y; y < max_y; ++y) {
+            //         let x_array = y_array[y].sort(function(a, b) { return a - b; });
+            //         for (let j = 0; j < x_array.length / 2; ++j) {
+            //             for (let x = x_array[j * 2]; x < x_array[j * 2 + 1]; ++x) {
+            //                 ctx.fillRect(Math.floor(x), Math.floor(y), 1, 1);
+            //             }
+            //         }
+            //     }
+            // }
+
+            // var facets = [
+            //     [0, 1, 5],
+            //     [1, 2, 5],
+            //     [2, 3, 5],
+            //     [3, 4, 5],
+            //     [4, 0, 5]
+            // ]
+            // var I_fon = 20, I_p = 235, K_p = 0.4;
+            // var lamp = [-100, -100, -100];
+            
+            // function cosinus(v1, v2) {
+            //     return (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2])
+            //         / (Math.sqrt(Math.pow(v1[0], 2) + Math.pow(v1[1], 2) + Math.pow(v1[2], 2))
+            //             * Math.sqrt(Math.pow(v2[0], 2) + Math.pow(v2[1], 2) + Math.pow(v2[2], 2)));
+            // }
+
+
+            // for (let i = 0; i < facets.length; ++i){
+            //     var p0 = points[facets[i][0]]
+            //     var p1 = points[facets[i][1]]
+            //     var p2 = points[facets[i][2]]
+            //     var center_0_1 = [(p0[0] + p1[0])/2, (p0[1] + p1[1])/2, (p0[2] + p1[2])/2]
+            //     var center = [(center_0_1[0] + p2[0]/2), (center_0_1[1] + p2)/2, (center_0_1[2] + p2[2])/2]
+            //     var light = [
+            //         lamp[0] - center[0],
+            //         lamp[1] - center[1],
+            //         lamp[2] - center[2]
+            //     ]
+            //     var normal =[
+            //         (p1[1] - p0[1]) * (p2[2] - p0[2]) - (p2[1] - p0[1]) * (p1[2] - p0[2]),
+            //         (p2[0] - p0[0]) * (p1[2] - p0[2]) - (p1[0] - p0[0]) * (p2[2] - p0[2]),
+            //         (p1[0] - p0[0]) * (p2[1] - p0[1]) - (p2[0] - p0[0]) * (p1[1] - p0[1])
+            //     ]
+            //     console.log(normal)
+            //     var observer = [0, 0, -1]
+            //     if (cosinus(observer, normal) <= 0){
+            //         var cos_phi = cosinus(light, normal)
+            //         var I = I_fon + K_p * I_p * cos_phi
+            //         ctx.fillStyle = `rgb(
+            //             ${I},
+            //             ${0},
+            //             ${0})`
+            //         fill([p0, p1, p2])
+            //         ctx.fillStyle = '#aaffff';
+            //         Line(p0[0], p0[1], p1[0], p1[1]);
+            //         Line(p0[0], p0[1], p2[0], p2[1]);
+            //         Line(p2[0], p2[1], p1[0], p1[1]);
+
+            //     }
+
+            // }
 
             
         </script>
